@@ -36,8 +36,7 @@ jobs:
         run: python -m pytest -v
 
       - name: Build Docker image
-        run: |
-          docker build -t production-mlops-api .
+        run: docker build -t production-mlops-api .
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -48,6 +47,11 @@ jobs:
 
       - name: Tag and push Docker image
         run: |
-          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}:latest" | tr '[:upper:]' '[:lower:]')
-          docker tag production-mlops-api "$IMAGE_NAME"
-          docker push "$IMAGE_NAME"
+          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          SHA_TAG=${GITHUB_SHA::7}
+
+          docker tag production-mlops-api "$IMAGE_NAME:latest"
+          docker tag production-mlops-api "$IMAGE_NAME:$SHA_TAG"
+
+          docker push "$IMAGE_NAME:latest"
+          docker push "$IMAGE_NAME:$SHA_TAG"
