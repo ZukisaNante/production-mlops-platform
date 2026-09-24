@@ -46,5 +46,6 @@ jobs:
 
       - name: Tag and push Docker image
         run: |
-          docker tag production-mlops-api ghcr.io/zukisanante/production-mlops-api:latest
-          docker push ghcr.io/zukisanante/production-mlops-api:latest
+          IMAGE_NAME=$(echo "ghcr.io/${{ github.repository }}:latest" | tr '[:upper:]' '[:lower:]')
+          docker tag production-mlops-api "$IMAGE_NAME"
+          docker push "$IMAGE_NAME"
