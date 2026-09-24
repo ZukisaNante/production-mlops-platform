@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+    permissions:
+      contents: read
+      pull-requests: write
 
 jobs:
   test:
@@ -33,3 +36,15 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t production-mlops-api .
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Tag and push Docker image
+        run: |
+          docker tag production-mlops-api ghcr.io/${{ github.repository_owner }}/production-mlops-api:latest
+          docker push ghcr.io/${{ github.repository_owner }}/production-mlops-api:latest
