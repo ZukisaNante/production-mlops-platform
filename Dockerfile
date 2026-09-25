@@ -10,6 +10,9 @@ COPY . .
 
 RUN python src/train.py
 
+ARG BUILD_SHA=unknown
+ENV BUILD_SHA=$BUILD_SHA
+
 EXPOSE 8000
 
 CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8000"]

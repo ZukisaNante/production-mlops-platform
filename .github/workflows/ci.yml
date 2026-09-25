@@ -36,7 +36,9 @@ jobs:
         run: python -m pytest -v
 
       - name: Build Docker image
-        run: docker build -t production-mlops-api .
+        run: docker build\
+          --build-arg BUILD_SHA=${{ github.sha }} \
+          -t production-mlops-api .
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
