@@ -7,6 +7,9 @@ from pydantic import BaseModel
 
 MODEL_PATH = Path("models") / "model.joblib"
 
+API_VERSION = "1.0.0"
+MODEL_VERSION = "1.0.0"
+
 app = FastAPI(title="Production MLOps Platform")
 
 model = joblib.load(MODEL_PATH)
@@ -24,6 +27,14 @@ def root():
 @app.get("/health")
 def health():
     return {"status": "healthy"}
+
+
+@app.get("/version")
+def version():
+    return {
+        "api_version": API_VERSION,
+        "model_version": MODEL_VERSION
+    }
 
 
 @app.post("/predict")

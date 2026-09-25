@@ -30,3 +30,11 @@ def test_predict():
 
     assert response.status_code == 200
     assert response.json() == {"prediction": 0}    
+
+    def test_version():
+        response = client.get("/version")
+        assert response.status_code == 200
+        assert response.json() == {
+            "api_version": "1.0.0",
+            "model_version": "1.0.0"
+        }
